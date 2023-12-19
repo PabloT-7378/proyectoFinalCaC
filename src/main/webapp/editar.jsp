@@ -21,6 +21,7 @@
                     <h1>Editar Orador</h1>
                     <form method="POST"
                             action="<%=request.getContextPath()%>/EditarController">
+                            <input type="hidden" id="id" name="id" value="<%=orador.getIdOrador()%>">
                             <div class="mb-3">
                               <label for="exampleFormControlInput1" class="form-label">Nombre</label>
                               <input name="nombre"

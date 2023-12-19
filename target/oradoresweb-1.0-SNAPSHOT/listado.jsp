@@ -47,7 +47,7 @@
                 <td><%=unOrador.getMail() %></td>
                 <td><%=unOrador.getTema() %></td>
                 <td>
-                  <a class="btn btn-danger" href="<%=request.getContextPath()%>/EliminarController?id=<%=unOrador.getIdOrador()%>" role="button">Eliminar</a> | 
+                  <button class="btn btn-danger" onclick="confirmarEliminar(<%=unOrador.getIdOrador()%>)">Eliminar</button> | 
                   <a class="btn btn-secondary" href="<%=request.getContextPath()%>/EditarController?id=<%=unOrador.getIdOrador()%>" role="button">Editar</a>
                 </td>
               </tr>
@@ -64,5 +64,12 @@
         </main>
              
      <%@include file="footer.jsp" %>
+     <script>
+        function confirmarEliminar(idOrador) {
+            if (confirm("¿Realmente deseas eliminar este orador?")) {
+                window.location.href = "<%=request.getContextPath()%>/EliminarController?id=" + idOrador;
+            }
+        }
+    </script>
     </body>	
 </html>

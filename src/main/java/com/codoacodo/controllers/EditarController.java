@@ -20,7 +20,7 @@ public class EditarController extends HttpServlet {
 
    @Override
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    String idOrador = req.getParameter("id_orador");
+    String idOrador = req.getParameter("id");
 
     try {
         OradorDAO dao = new OradorDAO();
@@ -47,11 +47,11 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
         String apellido = req.getParameter("apellido");
         String mail = req.getParameter("mail");
         String tema = req.getParameter("tema");
-
+        String id = req.getParameter("id");
         OradorDAO dao = new OradorDAO();
 
         try {
-            dao.actualizarOrador(nombre, apellido, mail, tema);
+            dao.actualizarOrador(Integer.valueOf(id), nombre, apellido, mail, tema);
 
             resp.sendRedirect(req.getContextPath() + "/api/ListadoController");
 

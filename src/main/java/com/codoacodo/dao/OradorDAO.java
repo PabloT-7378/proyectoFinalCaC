@@ -34,12 +34,12 @@ public class OradorDAO {
         rs = st.executeQuery(sql);
 
         while (rs.next()) {
-            int idOrador = rs.getInt("id_orador");
-            String nombre = rs.getString("nombre");
-            String apellido = rs.getString("apellido");
-            String mail = rs.getString("mail");
-            String tema = rs.getString("tema");
-            Timestamp fechaAlta = rs.getTimestamp("fecha_alta");
+            int idOrador = rs.getInt(1);
+            String nombre = rs.getString(2);
+            String apellido = rs.getString(3);
+            String mail = rs.getString(4);
+            String tema = rs.getString(5);
+            Timestamp fechaAlta = rs.getTimestamp(6);
 
             Orador oraFromDb = new Orador(idOrador, nombre, apellido, mail, tema, fechaAlta);
             list.add(oraFromDb);
@@ -85,7 +85,7 @@ public class OradorDAO {
 }
 
     
-    public int actualizarOrador(String nombre, String apellido, String mail, String tema) throws SQLException {
+    public int actualizarOrador(int idx, String nombre, String apellido, String mail, String tema) throws SQLException {
     Connection conn = AdministradorDeConexiones.getConnection();
     PreparedStatement stmt = null;
     int registros = 0;
@@ -98,6 +98,7 @@ public class OradorDAO {
         stmt.setString(2, apellido);
         stmt.setString(3, mail);
         stmt.setString(4, tema);
+        stmt.setLong(5, idx);
 
         registros = stmt.executeUpdate();
     } catch (SQLException  | NullPointerException e) {
@@ -175,32 +176,37 @@ public class OradorDAO {
     }
     
     public Orador obtenerPorId(int id) throws SQLException {
-    String sql = SQL_OBTENER_ID;
-         Connection conn = AdministradorDeConexiones.getConnection();
-         
-         Orador oraFromDb = null;
-     
-         try {
-            Statement stmt = conn.createStatement();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int registros = 0;
+        Orador oradFromDb = null;
 
-            ResultSet rs = stmt.executeQuery(sql);
+        //Statement
+        try {
+                conn = AdministradorDeConexiones.getConnection();
+                stmt = conn.prepareStatement(SQL_OBTENER_ID);
+                stmt.setLong(1, id);
+                ResultSet rs = stmt.executeQuery();
+                //VIENE UN SOLO REGISTRO!!!
 
-            if (rs.next()) {
-                Integer idOrador = rs.getInt(1);
-                String nombre = rs.getString(2);
-                String apellido = rs.getString(3);
-                String mail = rs.getString(4);
-                String tema = rs.getString(5);
-                Timestamp fechaAlta = rs.getTimestamp(6);
+                if(rs.next()) {//si existe, hay uno solo
+                        // rs > sacando los datos
+                        int idOrador = rs.getInt(1);
+                        String nombre = rs.getString(2);
+                        String apellido = rs.getString(3);
+                        String mail = rs.getString(4);
+                        String tema = rs.getString(5);
+                        Timestamp fechaAlta = rs.getTimestamp(6);
 
-            oraFromDb = new Orador(idOrador, nombre, apellido, mail, tema, fechaAlta);
-        }
-    } catch (SQLException e) {
-        throw e;
-    }
-
-    return oraFromDb;
-}
+                        //campos crear un objeto????
+                        oradFromDb = new Orador(idOrador,nombre,apellido,mail,tema,fechaAlta);
+                }			
+		} catch (SQLException e) {
+			// ERRORES
+			e.printStackTrace();
+		}
+		return oradFromDb;
+	}
 
     
 }
